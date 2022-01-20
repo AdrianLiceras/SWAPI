@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ejemplointernet.databinding.ActivityMainBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -18,13 +19,76 @@ import kotlin.coroutines.coroutineContext
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityMainBinding
+    private lateinit var  adapter:PlanetAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        var list= List(1){""}
+        var planetaaa=Planet("","","","","","","","","",list,list,"","","")
+        var listaPlanet= MutableList<Planet>(0){planetaaa}
+            //var listaPlaneta:MutableList<PlanetResponse>
 
-        binding.bDescargaUno.setOnClickListener {
+            val client = OkHttpClient()
+
+            val request = Request.Builder()
+            request.url("https://swapi.dev/api/planets/")
+
+
+            val call = client.newCall(request.build())
+            call.enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    println(e.toString())
+                    CoroutineScope(Dispatchers.Main).launch {
+                        Toast.makeText(this@MainActivity, "Algo ha ido mal", Toast.LENGTH_SHORT).show()
+
+                    }
+
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    println(response.toString())
+                    response.body?.let { responseBody ->
+
+                        val body = responseBody.string()
+                        println(body)
+                        val gson = Gson()
+
+                        val planet = gson.fromJson(body, PlanetResponse::class.java)
+
+                        println(planet)
+
+
+                        CoroutineScope(Dispatchers.Main).launch {
+
+                            Toast.makeText(this@MainActivity, "$planet", Toast.LENGTH_SHORT).show()
+                            //listaPlanet = MutableList(60) {planet.results[it]}
+                            planet.results.forEach {
+                                listaPlanet.add(it)
+                            }
+                            adapter=PlanetAdapter(listaPlanet)
+                            binding.recyclerview.layoutManager = LinearLayoutManager(this@MainActivity)
+                            binding.recyclerview.adapter = adapter
+
+                            listaPlanet.forEach {
+                                println(it.name)
+                            }
+                        }
+
+                    }
+                }
+            })
+
+        }
+    }
+
+
+
+
+
+
+/* binding.bDescargaUno.setOnClickListener {
             binding.pbDownloading.visibility = View.VISIBLE
 
             val client = OkHttpClient()
@@ -55,47 +119,6 @@ class MainActivity : AppCompatActivity() {
 
                         println(planet)
 
-                  
-                        CoroutineScope(Dispatchers.Main).launch {
-                            binding.pbDownloading.visibility = View.GONE
-                            Toast.makeText(this@MainActivity, "$planet", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
-            })
-        }
-
-        binding.bDescargaTodos.setOnClickListener {
-            binding.pbDownloading.visibility = View.VISIBLE
-
-            val client = OkHttpClient()
-
-            val request = Request.Builder()
-            request.url("https://swapi.dev/api/planets/")
-
-
-            val call = client.newCall(request.build())
-            call.enqueue( object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    println(e.toString())
-                    CoroutineScope(Dispatchers.Main).launch {
-                        Toast.makeText(this@MainActivity, "Algo ha ido mal", Toast.LENGTH_SHORT).show()
-                        binding.pbDownloading.visibility = View.GONE
-                    }
-
-                }
-
-                override fun onResponse(call: Call, response: Response) {
-                    println(response.toString())
-                    response.body?.let { responseBody ->
-                        val body = responseBody.string()
-                        println(body)
-                        val gson = Gson()
-
-                        val planet = gson.fromJson(body, PlanetResponse::class.java)
-
-                        println(planet)
-
 
                         CoroutineScope(Dispatchers.Main).launch {
                             binding.pbDownloading.visibility = View.GONE
@@ -104,6 +127,4 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             })
-        }
-    }
-}
+        }*/

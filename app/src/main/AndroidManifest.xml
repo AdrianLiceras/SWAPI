@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EjemploInternet">
         <activity
+            android:name=".DescargarPlanet"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
