@@ -21,9 +21,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var  adapter:PlanetAdapter
     lateinit var  listaPlanet:MutableList<Planet>
 
-    companion object{
-        val activity=MainActivity()
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
