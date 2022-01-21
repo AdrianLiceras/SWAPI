@@ -1,34 +1,37 @@
 package com.example.ejemplointernet
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ejemplointernet.databinding.ActivityMainBinding
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import okhttp3.*
 import java.io.IOException
-import kotlin.coroutines.coroutineContext
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityMainBinding
     private lateinit var  adapter:PlanetAdapter
+    lateinit var  listaPlanet:MutableList<Planet>
 
+    companion object{
+        val activity=MainActivity()
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        var list= List(1){""}
-        var planetaaa=Planet("","","","","","","","","",list,list,"","","")
-        var listaPlanet= MutableList<Planet>(0){planetaaa}
-            //var listaPlaneta:MutableList<PlanetResponse>
+        val list= List(1){""}
+        val planetaaa=Planet("","","","","","","","","",list,list,"","","")
+         listaPlanet= MutableList<Planet>(0){planetaaa}
+
 
             val client = OkHttpClient()
 
@@ -37,6 +40,7 @@ class MainActivity : AppCompatActivity() {
 
 
             val call = client.newCall(request.build())
+
             call.enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     println(e.toString())
@@ -61,26 +65,44 @@ class MainActivity : AppCompatActivity() {
 
 
                         CoroutineScope(Dispatchers.Main).launch {
-
                             Toast.makeText(this@MainActivity, "$planet", Toast.LENGTH_SHORT).show()
                             //listaPlanet = MutableList(60) {planet.results[it]}
                             planet.results.forEach {
                                 listaPlanet.add(it)
                             }
                             adapter=PlanetAdapter(listaPlanet)
+
                             binding.recyclerview.layoutManager = LinearLayoutManager(this@MainActivity)
                             binding.recyclerview.adapter = adapter
 
                             listaPlanet.forEach {
                                 println(it.name)
                             }
+
+
+
+
+
+
                         }
 
+
                     }
+
                 }
+
             })
+        //Funcion en ActivityMain
+        fun pasarPantalla(planet: String){
+            val intent = Intent(this, DescargarPlanet::class.java)
+            intent.putExtra("PLANETA", planet)
+            startActivity(intent)
+        }
 
         }
+
+
+
     }
 
 

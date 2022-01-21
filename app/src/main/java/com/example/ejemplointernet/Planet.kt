@@ -22,6 +22,8 @@ data class Planet (
     val films: List<String>,
     val created: String,
     val edited: String,
-    val url: String
+    val url: String,
+
 ) : Parcelable
+
 

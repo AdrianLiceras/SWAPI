@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/AlumnoM/AndroidStudioProjects/SWAPI/app/src/main/res/layout/activity_descargar_planet.xml" value="0.24895833333333334" />
+        <entry key="..\:/Users/AlumnoM/AndroidStudioProjects/SWAPI/app/src/main/res/layout/activity_main.xml" value="0.1265625" />
+        <entry key="..\:/Users/AlumnoM/AndroidStudioProjects/SWAPI/app/src/main/res/layout/item_planet.xml" value="0.1265625" />
         <entry key="..\:/Users/CARLOSTENA/AndroidStudioProjects/EjemploInternet/app/src/main/res/layout/activity_main.xml" value="0.1921875" />
         <entry key="..\:/Users/adria/AndroidStudioProjects/EjemploInternet/app/src/main/res/layout/activity_descargar_planet.xml" value="0.17617753623188406" />
         <entry key="..\:/Users/adria/AndroidStudioProjects/EjemploInternet/app/src/main/res/layout/activity_main.xml" value="0.13405797101449277" />
